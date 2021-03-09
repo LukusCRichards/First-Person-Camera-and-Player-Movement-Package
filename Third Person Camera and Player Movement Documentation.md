@@ -4,9 +4,19 @@ This documentation will tell you how to make the script and how to implement it 
 
 ## Required Components
 
-1 Script
+2 Script
+
+1 RigidBody
 
 ## Writing the Script
+
+### Third Person Character Controller
+
+
+
+### Third Person Camera Controller
+
+
 
 ## Things to Note
 
