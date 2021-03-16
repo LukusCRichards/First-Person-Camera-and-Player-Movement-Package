@@ -94,15 +94,66 @@ If you're written these correctly and you did not encounter any errors (save for
 
 ### First Person Camera Controller
 
+In this script, create 1 public float variable 1 public Transform variable and 1 private float variable with a value of 0 which should look like this:
 
+    public float rotationSpeed = 75f;
+
+    public Transform character;
+
+    float xRotation = 0f;
+
+These variables are what the camera will use to make the camera rotate with the mouse and the transform variable is what makes sure that the character rotates along with it.
+
+In the Update method, write a reference to the method called **CamControl** and underneath it, create the CamControll method which should look like the following:
+    
+    void Update()
+    {
+        CamControl();        
+    }
+
+    void CamControl()
+    {
+
+        float mouseX = Input.GetAxis("Mouse X") * rotationSpeed * Time.deltaTime;
+        float mouseY = Input.GetAxis("Mouse Y") * rotationSpeed * Time.deltaTime;
+        mouseY = Mathf.Clamp(mouseY, -35, 60);
+
+        xRotation -= mouseY;
+        xRotation = Mathf.Clamp(xRotation, -50f, 90f);
+
+        transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+        character.Rotate(Vector3.up * mouseX);
+    }
+
+The referenced method in the Update method is what makes sure that the camera can rotate as the Update methof checks everyframe, as what should happen for this method.
+
+Same as the float variables used for the Character Controller script, the 2 float variables in this method will be used to make the camera along with the mouse's movement in all directions. If you encounter any inverted camera movement, you might have wrote negative (-) next to one of the Inputs for the axis and all you need to do is remove it.
+
+In this method, you might see something you're not familiar with using the Mathf: **.Clamp**. .Clamp (or **Clamping**) is used to make sure that a rotation can't go past its set rotation axis, which is useful especially for a camera.
 
 #### Jump Controller
 
 For this script, you don't need to add much to it as this will only be used to calculate how high the character can jump.
 
+You just need to write a public float variable called jumpForce and give it any value you want.
+
+    public float jumpHeight = 3f;
+
+This is what the Character Controller script will reference in order to make the character jump, as the value of this variable is what will be used when the jump method is called from the Character Controller script.
+
 ## Putting Everything Together
 
+After you've written the scripts, it's time to make the other assets for the character.
 
+First, create an empty GameObject and name it First Person Player, then give it the Character Controller component and edit its **raduis** to **0.6** and its **height** to **3.8** as this changes the size of its collider. Now reset its transform then add a 3D Object of your choice into it as a child and remove its collider component as it is not needed anymore. You don't add the Character Controller script to the child.
+
+Next thing to do is to create a Camera GameObject, or use the Main Camera, parent it to the First Person Player GameObject and reset it transform. Make sure to raise it up a bit so it reaches the head, but **do not** move it in any other direction as this will mess with the character's rotation through the camera.
+
+Now create one more empty GameObject and name it as **Ground Check** and move it to the very bottom of the character as this is what the Character Controller script will use in order to check whether or not the character's isGrounded value is true.
+
+Finally, add the First Person Character Controller and Jump Controller scripts to the First Person Player GameObject and assign the corresponding assets into the First Person Character Controller script's slots. Then add the First Person Camera Controller script into the Camera GameObject and asign the First Person Player GameObject into the Character slot of that very script.
+
+If you've done everything correctly, your character should not be moving in the direction you're facing and jump whenever you press the space button, but not jumping agani while you're in the air. If you feel like the jumping is too high or too low, simply change its value.
 
 ## Things to Note
 
@@ -110,7 +161,8 @@ For this script, you don't need to add much to it as this will only be used to c
 
 This script is capable of making the character rotate with the camera and make the character move in the direction of where it faces.
 
-This script it **not** capable of adjusting its axis when something blocks its view as this is a basic version of a camera movement script.
+This script it **not** capable of adjusting its axis when something blocks its view, but this should not be a problem as it is contained in a collider through the Character Controller.
 
 ### IMPORTANT
 
+Make sure that any scripts you reference in other scripts are in an Awake method, because if you do not do this, the other scripts will not be referenced so that they work in the script that referenced it.
