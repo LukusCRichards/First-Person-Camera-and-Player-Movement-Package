@@ -84,7 +84,13 @@ The isGrounded bool may look different and might not look like the kind you're f
 
 The if statement makes sure that it cannot teleport you to the ground when the gravity in the velocity variable gets to high, because if it gets too high, it will look like you are heavier and you will move downward a lot faster as it never stops growing.
 
+The 2 float variables are what will be used to make the character move back and forth in every direction. The Vector3 variable is what sets the movement of the character and Character Controller variable is what makes the character move through the Character Controller component.
 
+The if statement will be made later, but this is what makes the character jump whenever the space button is pressed and isGrounded is true.
+
+The last two are what makes sure the character is able to fall to the ground after jumping or falling off a ledge. it utilizes both the gravity variable and Character Controller component.
+
+If you're written these correctly and you did not encounter any errors (save for the referenced Jump method, which will be made later), the character should now fall to the ground and move around.
 
 ### First Person Camera Controller
 
