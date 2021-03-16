@@ -41,11 +41,56 @@ The next thing to do is to reference the Jump Controller script by creating an A
         jumpController = GetComponent<JumpController>();
     }
 
+**Make sure you remember to reference the script in an Awake function**, because if you don't, you will not be able to reference the JumpController script.
+
+Now go to the Update void method and write the following:
+
+    void Update()
+    {
+        PlayerMovement();
+    }
+
+The Player Movement method is what will contain the character's movement and what will help organise the script.
+
+Under the Update method, create a private method called Player Movement and write the following:
+
+    void PlayerMovement()
+    {
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+
+        if (isGrounded && velocity.y < 0)
+        {
+            velocity.y = -2f;
+        }
+
+        float horoMove = Input.GetAxis("Horizontal") * speed;
+        float vertMove = Input.GetAxis("Vertical") * speed;
+
+        Vector3 move = transform.right * horoMove + transform.forward * vertMove;
+
+        controller.Move(move * speed * Time.deltaTime);
+
+        if(Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        {
+            Jump();
+        }
+
+        velocity.y += gravity * Time.deltaTime;
+
+        controller.Move(velocity * Time.deltaTime);
+    }
+
+The isGrounded bool may look different and might not look like the kind you're familiar with, but this is what makes sure that whenever the groundChack GameObject, that you will make later, is touching another GameObject with the layer Ground in the groundCheck layerMask, it will allow you to jump.
+
+The if statement makes sure that it cannot teleport you to the ground when the gravity in the velocity variable gets to high, because if it gets too high, it will look like you are heavier and you will move downward a lot faster as it never stops growing.
+
+
+
 ### First Person Camera Controller
 
 
 
-### Jump Controller
+#### Jump Controller
 
 For this script, you don't need to add much to it as this will only be used to calculate how high the character can jump.
 
